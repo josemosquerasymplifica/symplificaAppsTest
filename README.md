@@ -13,8 +13,8 @@ To run the application locally, follow these steps:
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/homecu/BlossomAwsDeploymentTest.git
-    cd BlossomAwsDeploymentTest
+    git clone https://github.com/josemosquerasymplifica/symplificaAppsTest.git
+    cd symplificaAppsTest
     ```
 
 2. Build and start the application using Docker Compose:
