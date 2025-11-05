@@ -1,7 +1,6 @@
 
 
-## Introduction
-The goal of this test is to demonstrate your ability to deploy an application using AWS services, ensuring security, scalability, and cost-efficiency.
+
 
 ## Prerequisites
 Before running the application, ensure you have the following installed:
@@ -23,3 +22,7 @@ To run the application locally, follow these steps:
     ```
 
 3. The application should now be running locally. You can access it at `http://localhost:3000`.
+
+4. Image application up! 
+
+![alt text](image-1.png)
