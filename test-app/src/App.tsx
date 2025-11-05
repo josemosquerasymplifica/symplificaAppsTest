@@ -2,7 +2,6 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import "./App.css";
 
-// ⚠️ Bug intencional: puerto incorrecto (debería ser 4000)
 const URL_API = "http://localhost:4001";
 
 interface Task {
@@ -26,17 +25,17 @@ const App: React.FC = () => {
     fetchTasks();
   }, []);
 
-  // ⚠️ Bug: no maneja errores ni estados de carga
+
   const fetchTasks = async () => {
     try {
       const response = await axios.get(`${URL_API}/tasks`);
       setTasks(response.data);
     } catch (error) {
-      console.log("Error al cargar tareas"); // no muestra error visual
+      console.log("Error al cargar tareas"); 
     }
   };
 
-  // ⚠️ Bug: no valida campos, acepta cualquier carácter
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -46,13 +45,13 @@ const App: React.FC = () => {
         ? (e as ChangeEvent<HTMLInputElement>).target.checked
         : null;
 
-    // ⚠️ Bug: reemplaza todo el estado (pierde datos anteriores)
+
     setNewTask({
       [name]: type === "checkbox" ? checked : value,
     } as any);
   };
 
-  // ⚠️ Bug: no valida campos vacíos
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
@@ -64,7 +63,7 @@ const App: React.FC = () => {
     }
   };
 
-  // ⚠️ Bug: elimina sin confirmar y no maneja errores
+
   const handleDelete = async (id: number) => {
     try {
       await axios.delete(`${URL_API}/tasks/${id}`);

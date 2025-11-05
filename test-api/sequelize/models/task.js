@@ -6,14 +6,14 @@ module.exports = (sequelize, DataTypes) => {
 
   Task.init(
     {
-      title: DataTypes.STRING, // ⚠️ Sin validación ni longitud mínima
-      description: DataTypes.STRING, // ⚠️ Acepta vacío o null
+      title: DataTypes.STRING,
+      description: DataTypes.STRING, 
       completed: DataTypes.BOOLEAN,
     },
     {
       sequelize,
       modelName: "Task",
-      timestamps: false, // ⚠️ Bug: sin timestamps (difícil auditar)
+      timestamps: false, 
     }
   );
   return Task;
