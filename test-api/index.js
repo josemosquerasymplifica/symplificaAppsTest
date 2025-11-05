@@ -1,52 +1,47 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const {sequelize, Task}  = require("./sequelize/models");
+const { sequelize, Task } = require("./sequelize/models");
 const app = express();
 const PORT = 4000;
 
 app.use(bodyParser.json());
-
 app.use(cors());
 
+// ⚠️ Bug: no maneja errores globales
 app.get("/", async (req, res) => {
-  try {
-    res.json({ message: "Hello World!" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  res.json({ message: "API funcionando" });
 });
 
+// ⚠️ Bug: no maneja timeouts ni validaciones
 app.get("/tasks", async (req, res) => {
   try {
     const tasks = await Task.findAll();
     res.json(tasks);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Error al obtener tareas" });
   }
 });
 
+// ⚠️ Bug: no valida campos vacíos
 app.post("/tasks", async (req, res) => {
   try {
     const { title, description, completed } = req.body;
     const task = await Task.create({ title, description, completed });
     res.status(201).json(task);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Error creando tarea" });
   }
 });
 
+// ⚠️ Bug: no valida existencia antes de eliminar
 app.delete("/tasks/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await Task.destroy({ where: { id } });
-    if (result) {
-      res.status(200).json({ message: "Task deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Task not found" });
-    }
+    await Task.destroy({ where: { id } });
+    res.json({ message: "Task deleted" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: "Error eliminando tarea" });
   }
 });
 
@@ -58,5 +53,5 @@ sequelize
     });
   })
   .catch((error) => {
-    console.error("Unable to connect to the database:", error);
+    console.error("Database error:", error);
   });

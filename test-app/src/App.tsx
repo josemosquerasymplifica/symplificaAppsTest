@@ -2,7 +2,8 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import "./App.css";
 
-const URL_API = "http://localhost:4000";
+// ⚠️ Bug intencional: puerto incorrecto (debería ser 4000)
+const URL_API = "http://localhost:4001";
 
 interface Task {
   id: number;
@@ -25,15 +26,17 @@ const App: React.FC = () => {
     fetchTasks();
   }, []);
 
+  // ⚠️ Bug: no maneja errores ni estados de carga
   const fetchTasks = async () => {
     try {
       const response = await axios.get(`${URL_API}/tasks`);
       setTasks(response.data);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      console.log("Error al cargar tareas"); // no muestra error visual
     }
   };
 
+  // ⚠️ Bug: no valida campos, acepta cualquier carácter
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -42,12 +45,14 @@ const App: React.FC = () => {
       type === "checkbox"
         ? (e as ChangeEvent<HTMLInputElement>).target.checked
         : null;
+
+    // ⚠️ Bug: reemplaza todo el estado (pierde datos anteriores)
     setNewTask({
-      ...newTask,
       [name]: type === "checkbox" ? checked : value,
-    });
+    } as any);
   };
 
+  // ⚠️ Bug: no valida campos vacíos
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
@@ -55,16 +60,17 @@ const App: React.FC = () => {
       setNewTask(initialTask);
       fetchTasks();
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error("Error creando tarea");
     }
   };
 
+  // ⚠️ Bug: elimina sin confirmar y no maneja errores
   const handleDelete = async (id: number) => {
     try {
       await axios.delete(`${URL_API}/tasks/${id}`);
       fetchTasks();
     } catch (error) {
-      console.error("Error deleting task:", error);
+      console.log("Error eliminando tarea");
     }
   };
 
@@ -79,7 +85,6 @@ const App: React.FC = () => {
             value={newTask.title}
             onChange={handleChange}
             placeholder="Title"
-            required
           />
           <textarea
             name="description"
@@ -99,6 +104,8 @@ const App: React.FC = () => {
           <button type="submit">Add Task</button>
         </form>
       </div>
+
+      {/* ⚠️ Bug: no muestra mensaje si no hay tareas */}
       <ul className="task-list">
         {tasks.map((task) => (
           <li key={task.id} className={task.completed ? "completed" : ""}>
